@@ -22,7 +22,16 @@ type FormData = {
 };
 
 const Form = () => {
+    const [profession, setProfession] = useState('');
+    const [typeOfEvent, setTypeOfEvent] = useState('');
+    const [submittedData, setSubmittedData] = useState<FormData | null>(null);
 
+    const onSubmit: SubmitHandler<FormData> = (data) => {
+        setSubmittedData(data);
+        reset();
+        setProfession('');
+        setTypeOfEvent('');
+    };
 
     const {
         register,
@@ -31,14 +40,6 @@ const Form = () => {
         watch,
         formState: { errors },
     } = useForm<FormData>();
-
-    const [submittedData, setSubmittedData] = useState<FormData | null>(null);
-
-
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        setSubmittedData(data);
-        reset();
-    };
 
     const watchPassword = watch("password");
 
@@ -101,8 +102,10 @@ const Form = () => {
                         label="Profession"
                         variant="outlined"
                         error={!!errors.profession}
-                        {...register("profession", { validate: (value) => value !== "0" })}
+                        value={profession} // Controlled by state
+                        onChange={(e) => setProfession(e.target.value)}
                     >
+
                         <MenuItem value="0">Select your profession...</MenuItem>
                         <MenuItem value="developer">Software Developer</MenuItem>
                         <MenuItem value="senior">Senior Consultant</MenuItem>
@@ -131,7 +134,8 @@ const Form = () => {
                         label="Type of event"
                         variant="outlined"
                         error={!!errors.typeofevent}
-                        {...register("typeofevent", { validate: (value) => value !== "0" })}
+                        value={typeOfEvent} // Controlled by state
+                        onChange={(e) => setTypeOfEvent(e.target.value)}
                     >
                         <MenuItem value="0">Select your type of event...</MenuItem>
                         <MenuItem value="private">Private</MenuItem>
@@ -147,16 +151,9 @@ const Form = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker />
                     </LocalizationProvider>
+                    
                 </div>
 
-                <div className="form-group">
-                    <Checkbox
-                        {...register("yearlyRepetition", {
-                            validate: (value) => value === true,
-                        })}
-                    />
-                    <label> Click here to indicate if the event recurs every year.</label>
-                </div>
 
                 <div className="form-group">
                     <FormControlLabel
