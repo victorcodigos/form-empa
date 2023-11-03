@@ -12,6 +12,7 @@ type FormData = {
     passwordConfirmation: string;
     profession: string;
     event: string;
+    typeofevent:string;
 
 
 };
@@ -116,6 +117,24 @@ const Form = () => {
                         helperText={errors.event ? "Event is required." : ""}
                         {...register("event", { required: true })}
                     />
+                </div>
+
+                <div className="form-group">
+                    <Select
+                        fullWidth
+                        label="Type of event"
+                        variant="outlined"
+                        error={!!errors.typeofevent}
+                        {...register("typeofevent", { validate: (value) => value !== "0" })}
+                    >
+                        <MenuItem value="0">Select your type of event...</MenuItem>
+                        <MenuItem value="private">Private</MenuItem>
+                        <MenuItem value="company">Company</MenuItem>
+                        <MenuItem value="voluntary">Voluntary</MenuItem>
+                        <MenuItem value="partner">Partner </MenuItem>
+                        <MenuItem value="other">Other</MenuItem>
+                    </Select>
+                    {errors.typeofevent && (<p className="error-message">Type of event is required.</p>)}
                 </div>
 
                 <div className="form-group">
