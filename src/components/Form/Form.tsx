@@ -24,6 +24,7 @@ type FormData = {
 const Form = () => {
     const [profession, setProfession] = useState('');
     const [typeOfEvent, setTypeOfEvent] = useState('');
+    const [selectedDate, setSelectedDate] = useState(null);
     const [submittedData, setSubmittedData] = useState<FormData | null>(null);
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -31,6 +32,7 @@ const Form = () => {
         reset();
         setProfession('');
         setTypeOfEvent('');
+        setSelectedDate(null);
     };
 
     const {
@@ -102,7 +104,7 @@ const Form = () => {
                         label="Profession"
                         variant="outlined"
                         error={!!errors.profession}
-                        value={profession} // Controlled by state
+                        value={profession} 
                         onChange={(e) => setProfession(e.target.value)}
                     >
 
@@ -134,7 +136,7 @@ const Form = () => {
                         label="Type of event"
                         variant="outlined"
                         error={!!errors.typeofevent}
-                        value={typeOfEvent} // Controlled by state
+                        value={typeOfEvent}
                         onChange={(e) => setTypeOfEvent(e.target.value)}
                     >
                         <MenuItem value="0">Select your type of event...</MenuItem>
@@ -149,9 +151,11 @@ const Form = () => {
 
                 <div className="form-group">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker />
+                        <DatePicker
+                            value={selectedDate} 
+                            onChange={(newDate) => setSelectedDate(newDate)} 
+                        />
                     </LocalizationProvider>
-                    
                 </div>
 
 
