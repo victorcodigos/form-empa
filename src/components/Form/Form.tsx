@@ -3,12 +3,14 @@ import { useState } from "react";
 import isEmail from "validator/lib/isEmail";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { MenuItem, Select } from "@mui/material";
 
 type FormData = {
     name: string;
     email: string;
     password: string;
-    passwordConfirmation:string;
+    passwordConfirmation: string;
+    profession: string;
 
 
 };
@@ -80,9 +82,28 @@ const Form = () => {
                         label="Password confirmation"
                         variant="outlined"
                         error={!!errors.passwordConfirmation}
-                        helperText={errors.passwordConfirmation ? "Password confirmation is required and should match the password.": ""}
+                        helperText={errors.passwordConfirmation ? "Password confirmation is required and should match the password." : ""}
                         {...register("passwordConfirmation", { required: true, validate: (value) => value === watchPassword })}
                     />
+                </div>
+
+                <div className="form-group">
+                    <Select
+                        fullWidth
+                        label="Profession"
+                        variant="outlined"
+                        error={!!errors.profession}
+                        {...register("profession", { validate: (value) => value !== "0" })}
+                    >
+                        <MenuItem value="0">Select your profession...</MenuItem>
+                        <MenuItem value="developer">Software Developer</MenuItem>
+                        <MenuItem value="senior">Senior Consultant</MenuItem>
+                        <MenuItem value="manager">Senior Manager</MenuItem>
+                        <MenuItem value="associate">Associate consultant</MenuItem>
+                        <MenuItem value="consultant">Consultant</MenuItem>
+                        <MenuItem value="other">Other</MenuItem>
+                    </Select>
+                    {errors.profession && (<p className="error-message">Profession is required.</p>)}
                 </div>
 
                 <div className="form-group">
