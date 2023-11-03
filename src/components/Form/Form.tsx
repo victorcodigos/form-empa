@@ -3,7 +3,7 @@ import { useState } from "react";
 import isEmail from "validator/lib/isEmail";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { MenuItem, Select } from "@mui/material";
+import { Checkbox, FormControlLabel, MenuItem, Select } from "@mui/material";
 
 type FormData = {
     name: string;
@@ -11,6 +11,7 @@ type FormData = {
     password: string;
     passwordConfirmation: string;
     profession: string;
+    event: string;
 
 
 };
@@ -104,6 +105,17 @@ const Form = () => {
                         <MenuItem value="other">Other</MenuItem>
                     </Select>
                     {errors.profession && (<p className="error-message">Profession is required.</p>)}
+                </div>
+
+                <div className="form-group">
+                    <TextField
+                        fullWidth
+                        label="Event"
+                        variant="outlined"
+                        error={!!errors.event}
+                        helperText={errors.event ? "Event is required." : ""}
+                        {...register("event", { required: true })}
+                    />
                 </div>
 
                 <div className="form-group">
