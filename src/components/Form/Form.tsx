@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 type FormData = {
     name: string;
     email: string;
+    password: string;
+    passwordConfirmation:string;
 
 
 };
@@ -17,6 +19,7 @@ const Form = () => {
         register,
         handleSubmit,
         reset,
+        watch,
         formState: { errors },
     } = useForm<FormData>();
 
@@ -27,10 +30,11 @@ const Form = () => {
         reset();
     };
 
+    const watchPassword = watch("password");
+
     return (
         <div className="app-container">
             <form onSubmit={handleSubmit(onSubmit)}>
-
 
                 <div className="form-group">
                     <TextField
@@ -54,6 +58,30 @@ const Form = () => {
                             required: true,
                             validate: (value) => isEmail(value),
                         })}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <TextField
+                        fullWidth
+                        type="password"
+                        label="Password"
+                        variant="outlined"
+                        error={!!errors.password}
+                        helperText={errors.password ? "Password is required and should have at least 7 characters." : ""}
+                        {...register("password", { required: true, minLength: 7 })}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <TextField
+                        fullWidth
+                        type="password"
+                        label="Password confirmation"
+                        variant="outlined"
+                        error={!!errors.passwordConfirmation}
+                        helperText={errors.passwordConfirmation ? "Password confirmation is required and should match the password.": ""}
+                        {...register("passwordConfirmation", { required: true, validate: (value) => value === watchPassword })}
                     />
                 </div>
 
