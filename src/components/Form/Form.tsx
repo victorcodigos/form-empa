@@ -3,7 +3,10 @@ import { useState } from "react";
 import isEmail from "validator/lib/isEmail";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Checkbox, FormControlLabel, MenuItem, Select } from "@mui/material";
+import { Checkbox, FormControlLabel, MenuItem, Select, FormGroup } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 type FormData = {
     name: string;
@@ -12,12 +15,14 @@ type FormData = {
     passwordConfirmation: string;
     profession: string;
     event: string;
-    typeofevent:string;
-
+    typeofevent: string;
+    privacyTerms: boolean;
+    yearlyRepetition: boolean;
 
 };
 
 const Form = () => {
+
 
     const {
         register,
@@ -28,6 +33,7 @@ const Form = () => {
     } = useForm<FormData>();
 
     const [submittedData, setSubmittedData] = useState<FormData | null>(null);
+
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setSubmittedData(data);
@@ -135,6 +141,37 @@ const Form = () => {
                         <MenuItem value="other">Other</MenuItem>
                     </Select>
                     {errors.typeofevent && (<p className="error-message">Type of event is required.</p>)}
+                </div>
+
+                <div className="form-group">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker />
+                    </LocalizationProvider>
+                </div>
+
+                <div className="form-group">
+                    <Checkbox
+                        {...register("yearlyRepetition", {
+                            validate: (value) => value === true,
+                        })}
+                    />
+                    <label> Click here to indicate if the event recurs every year.</label>
+                </div>
+
+                <div className="form-group">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                {...register("privacyTerms", {
+                                    validate: (value) => value === true,
+                                })}
+                            />
+                        }
+                        label="I agree with the privacy terms."
+                    />
+                    {errors.privacyTerms && (
+                        <p className="error-message">You must agree with the privacy terms.</p>
+                    )}
                 </div>
 
                 <div className="form-group">
