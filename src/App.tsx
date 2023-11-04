@@ -3,7 +3,11 @@ import Form from "./components/Form/Form";
 import "./App.css";
 
 const App = () => {
-  return <Form />;
+  return (
+    <div>
+      <Form />
+    </div>
+  );
 };
 
 export default App;

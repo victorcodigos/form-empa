@@ -3,10 +3,10 @@ import { useState } from "react";
 import isEmail from "validator/lib/isEmail";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Checkbox, FormControlLabel, MenuItem, Select, FormGroup } from "@mui/material";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Checkbox, FormControlLabel, MenuItem, Select } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 type FormData = {
     name: string;
@@ -18,22 +18,13 @@ type FormData = {
     typeofevent: string;
     privacyTerms: boolean;
     yearlyRepetition: boolean;
-
 };
 
 const Form = () => {
-    const [profession, setProfession] = useState('');
-    const [typeOfEvent, setTypeOfEvent] = useState('');
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [profession, setProfession] = useState("");
+    const [typeOfEvent, setTypeOfEvent] = useState("");
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [submittedData, setSubmittedData] = useState<FormData | null>(null);
-
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        setSubmittedData(data);
-        reset();
-        setProfession('');
-        setTypeOfEvent('');
-        setSelectedDate(null);
-    };
 
     const {
         register,
@@ -45,10 +36,25 @@ const Form = () => {
 
     const watchPassword = watch("password");
 
+    const onSubmit: SubmitHandler<FormData> = (data) => {
+
+        const newData = {
+            ...data,
+            profession: profession,
+            typeofevent: typeOfEvent,
+        };
+
+        setSubmittedData(newData);
+        reset();
+        setProfession("");
+        setTypeOfEvent("");
+        setSelectedDate(null);
+    };
+
     return (
         <div className="app-container">
             <form onSubmit={handleSubmit(onSubmit)}>
-
+                {/* INPUT NAME */}
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -59,7 +65,7 @@ const Form = () => {
                         {...register("name", { required: true })}
                     />
                 </div>
-
+                {/* INPUT EMAIL */}
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -73,7 +79,7 @@ const Form = () => {
                         })}
                     />
                 </div>
-
+                {/* INPUT PASSWORD */}
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -81,11 +87,15 @@ const Form = () => {
                         label="Password"
                         variant="outlined"
                         error={!!errors.password}
-                        helperText={errors.password ? "Password is required and should have at least 7 characters." : ""}
+                        helperText={
+                            errors.password
+                                ? "Password is required and should have at least 7 characters."
+                                : ""
+                        }
                         {...register("password", { required: true, minLength: 7 })}
                     />
                 </div>
-
+                {/* INPUT CONFIRM PASSWORD */}
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -93,32 +103,41 @@ const Form = () => {
                         label="Password confirmation"
                         variant="outlined"
                         error={!!errors.passwordConfirmation}
-                        helperText={errors.passwordConfirmation ? "Password confirmation is required and should match the password." : ""}
-                        {...register("passwordConfirmation", { required: true, validate: (value) => value === watchPassword })}
+                        helperText={
+                            errors.passwordConfirmation
+                                ? "Password confirmation is required and should match the password."
+                                : ""
+                        }
+                        {...register("passwordConfirmation", {
+                            required: true,
+                            validate: (value) => value === watchPassword,
+                        })}
                     />
                 </div>
-
+                {/* INPUT PROFESSION */}
                 <div className="form-group">
                     <Select
                         fullWidth
                         label="Profession"
                         variant="outlined"
                         error={!!errors.profession}
-                        value={profession} 
-                        onChange={(e) => setProfession(e.target.value)}
+                        value={profession}
+                        onChange={(e) => setProfession(e.target.value as string)}
                     >
-
                         <MenuItem value="0">Select your profession...</MenuItem>
-                        <MenuItem value="developer">Software Developer</MenuItem>
-                        <MenuItem value="senior">Senior Consultant</MenuItem>
-                        <MenuItem value="manager">Senior Manager</MenuItem>
-                        <MenuItem value="associate">Associate consultant</MenuItem>
-                        <MenuItem value="consultant">Consultant</MenuItem>
-                        <MenuItem value="other">Other</MenuItem>
+                        <MenuItem value="Developer">Software Developer</MenuItem>
+                        <MenuItem value="Senior">Senior Consultant</MenuItem>
+                        <MenuItem value="Manager">Senior Manager</MenuItem>
+                        <MenuItem value="Associate">Associate consultant</MenuItem>
+                        <MenuItem value="Consultant">Consultant</MenuItem>
+                        <MenuItem value="Other">Other</MenuItem>
                     </Select>
-                    {errors.profession && (<p className="error-message">Profession is required.</p>)}
+                    {errors.profession && (
+                        <p className="error-message">Profession is required.</p>
+                    )}
                 </div>
-
+                <h2>Data & Management Consulting </h2>
+                {/* INPUT ABOUT THE EVENT */}
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -129,7 +148,7 @@ const Form = () => {
                         {...register("event", { required: true })}
                     />
                 </div>
-
+                {/* INPUT TYPE OF EVENT  */}
                 <div className="form-group">
                     <Select
                         fullWidth
@@ -137,28 +156,42 @@ const Form = () => {
                         variant="outlined"
                         error={!!errors.typeofevent}
                         value={typeOfEvent}
-                        onChange={(e) => setTypeOfEvent(e.target.value)}
+                        onChange={(e) => setTypeOfEvent(e.target.value as string)}
                     >
                         <MenuItem value="0">Select your type of event...</MenuItem>
-                        <MenuItem value="private">Private</MenuItem>
-                        <MenuItem value="company">Company</MenuItem>
-                        <MenuItem value="voluntary">Voluntary</MenuItem>
-                        <MenuItem value="partner">Partner </MenuItem>
-                        <MenuItem value="other">Other</MenuItem>
+                        <MenuItem value="Private">Private</MenuItem>
+                        <MenuItem value="Company">Company</MenuItem>
+                        <MenuItem value="Voluntary">Voluntary</MenuItem>
+                        <MenuItem value="Partner">Partner</MenuItem>
+                        <MenuItem value="Other">Other</MenuItem>
                     </Select>
-                    {errors.typeofevent && (<p className="error-message">Type of event is required.</p>)}
+                    {errors.typeofevent && (
+                        <p className="error-message">Type of event is required.</p>
+                    )}
                 </div>
-
+                {/* INPUT DATE OF EVENT  */}
                 <div className="form-group">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                            value={selectedDate} 
-                            onChange={(newDate) => setSelectedDate(newDate)} 
+                            value={selectedDate}
+                            onChange={(newDate) => setSelectedDate(newDate)}
                         />
                     </LocalizationProvider>
                 </div>
-
-
+                {/* INPUT CHECK IF THIS EVENT HAPPENS EVERY YEAR  */}
+                <div className="form-group">
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                {...register("yearlyRepetition")}
+                                name="yearlyRepetition"
+                                color="primary"
+                            />
+                        }
+                        label="By clicking this button, you are confirming that this event takes place every year."
+                    />
+                </div>
+                {/* INPUT PRIVACY TERMS  */}
                 <div className="form-group">
                     <FormControlLabel
                         control={
@@ -174,13 +207,26 @@ const Form = () => {
                         <p className="error-message">You must agree with the privacy terms.</p>
                     )}
                 </div>
-
+                {/* BUTTON SEND  */}
                 <div className="form-group">
                     <Button type="submit" variant="contained" color="primary">
                         SEND
                     </Button>
                 </div>
             </form>
+            <div className="submitted-data">
+                <h2>Here are all the information</h2>
+                {submittedData && (
+                    <div>
+                        <p>Name: {submittedData.name}</p>
+                        <p>Email: {submittedData.email}</p>
+                        <p>Profession: {submittedData.profession}</p>
+                        <p>Type of event: {submittedData.typeofevent}</p>
+                        <p>Event: {submittedData.event}</p>
+                        <p>Yearly Repetition: {submittedData.yearlyRepetition ? 'Yes' : 'No'}</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
