@@ -55,6 +55,7 @@ const Form = () => {
         <div className="app-container">
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* INPUT NAME */}
+                <h2>Personal information </h2>
                 <div className="form-group">
                     <TextField
                         fullWidth
@@ -215,7 +216,7 @@ const Form = () => {
                 </div>
             </form>
             <div className="submitted-data">
-                <h2>Here are all the information</h2>
+                <h4>Below you will see the information after send it</h4>
                 {submittedData && (
                     <div>
                         <p>Name: {submittedData.name}</p>
